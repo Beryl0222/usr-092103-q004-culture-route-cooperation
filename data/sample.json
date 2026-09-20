@@ -1,0 +1,9 @@
+{
+  "event_id": "092103-004-sample-001",
+  "event_type": "VENUE_AVAILABILITY_CHANGED",
+  "aggregate_type": "route_release",
+  "aggregate_id": "culture_route_cooperation-001",
+  "occurred_at": "2026-09-20T16:00:00+08:00",
+  "version": 1,
+  "summary": "文化探访线路联营联调样例"
+}
