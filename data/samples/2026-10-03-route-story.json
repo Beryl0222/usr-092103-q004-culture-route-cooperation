@@ -1,0 +1,566 @@
+{
+  "dataset": "2026-10-03 什刹海文化漫游联营联调样例",
+  "description": "一条从点位自助维护、线路稳定发布、受限场馆自行确认，到在途闭店改线、打卡内容留存、争议暂缓分账与按合同结算的完整事件链。每个 aggregate_id 下的 version 严格单调递增；事件编号为 MMDDYY-线路序号-事件类别-当日序号。",
+  "events": [
+    {
+      "event_id": "092426-004-VPP-001",
+      "event_type": "VENUE_PROFILE_PUBLISHED",
+      "aggregate_type": "partner_venue",
+      "aggregate_id": "venue-liuquanju",
+      "occurred_at": "2026-09-24T10:00:00+08:00",
+      "version": 1,
+      "summary": "老字号柳泉居自行维护点位资料与预约条件",
+      "payload": {
+        "venue_name": "柳泉居",
+        "venue_category": "老字号",
+        "content_version": "v2",
+        "accessibility": {
+          "step_free_access": true,
+          "wheelchair_friendly": true,
+          "notes": "正门无台阶，内设无障碍餐位"
+        },
+        "booking_policy": {
+          "requires_confirmation": false,
+          "self_confirm_by_venue": false,
+          "notice_text": "饭点建议提前到店取号"
+        },
+        "exposed_fields": [
+          "open_calendar",
+          "daily_capacity",
+          "accessibility_summary",
+          "content_version",
+          "booking_policy"
+        ]
+      }
+    },
+    {
+      "event_id": "092426-004-VCP-002",
+      "event_type": "VENUE_CALENDAR_PUBLISHED",
+      "aggregate_type": "partner_venue",
+      "aggregate_id": "venue-liuquanju",
+      "occurred_at": "2026-09-24T10:05:00+08:00",
+      "version": 2,
+      "summary": "柳泉居发布国庆开放日历与每日接待容量",
+      "payload": {
+        "effective_from": "2026-10-01",
+        "effective_to": "2026-10-07",
+        "open_slots": [
+          { "weekday": 6, "open": "11:00", "close": "20:00" },
+          { "weekday": 7, "open": "11:00", "close": "20:00" }
+        ],
+        "daily_capacity": 120,
+        "closed_dates": []
+      }
+    },
+    {
+      "event_id": "092526-004-VPP-003",
+      "event_type": "VENUE_PROFILE_PUBLISHED",
+      "aggregate_type": "partner_venue",
+      "aggregate_id": "venue-yaer-hutong",
+      "occurred_at": "2026-09-25T09:00:00+08:00",
+      "version": 1,
+      "summary": "鸦儿胡同讲解点发布讲解内容 v3 与无障碍信息",
+      "payload": {
+        "venue_name": "鸦儿胡同讲解点",
+        "venue_category": "胡同讲解点",
+        "content_version": "v3",
+        "accessibility": {
+          "step_free_access": false,
+          "wheelchair_friendly": false,
+          "notes": "胡同内有门槛与碎石路面，轮椅需绕行烟袋斜街方向"
+        },
+        "booking_policy": {
+          "requires_confirmation": false,
+          "self_confirm_by_venue": false,
+          "notice_text": "开放式讲解点，随到随听"
+        },
+        "exposed_fields": [
+          "open_calendar",
+          "daily_capacity",
+          "accessibility_summary",
+          "content_version",
+          "audio_assets"
+        ]
+      }
+    },
+    {
+      "event_id": "092526-004-VCP-004",
+      "event_type": "VENUE_CALENDAR_PUBLISHED",
+      "aggregate_type": "partner_venue",
+      "aggregate_id": "venue-yaer-hutong",
+      "occurred_at": "2026-09-25T09:05:00+08:00",
+      "version": 2,
+      "summary": "鸦儿胡同讲解点发布开放日历",
+      "payload": {
+        "effective_from": "2026-10-01",
+        "effective_to": "2026-10-31",
+        "open_slots": [
+          { "weekday": 1, "open": "09:00", "close": "17:00" },
+          { "weekday": 2, "open": "09:00", "close": "17:00" },
+          { "weekday": 3, "open": "09:00", "close": "17:00" },
+          { "weekday": 4, "open": "09:00", "close": "17:00" },
+          { "weekday": 5, "open": "09:00", "close": "17:00" },
+          { "weekday": 6, "open": "09:00", "close": "18:00" },
+          { "weekday": 7, "open": "09:00", "close": "18:00" }
+        ],
+        "daily_capacity": 0,
+        "closed_dates": []
+      }
+    },
+    {
+      "event_id": "092626-004-VPP-005",
+      "event_type": "VENUE_PROFILE_PUBLISHED",
+      "aggregate_type": "partner_venue",
+      "aggregate_id": "venue-guanghe-theater",
+      "occurred_at": "2026-09-26T11:00:00+08:00",
+      "version": 1,
+      "summary": "广和楼剧场声明受限场馆，预约须由剧场自行确认",
+      "payload": {
+        "venue_name": "广和楼剧场",
+        "venue_category": "剧场",
+        "content_version": "v1",
+        "accessibility": {
+          "step_free_access": true,
+          "wheelchair_friendly": true,
+          "notes": "南侧无障碍入口，观演区预留轮椅位"
+        },
+        "booking_policy": {
+          "requires_confirmation": true,
+          "self_confirm_by_venue": true,
+          "notice_text": "观演预约以剧场确认为准，平台不代确认"
+        },
+        "exposed_fields": [
+          "open_calendar",
+          "daily_capacity",
+          "remaining_capacity",
+          "accessibility_summary",
+          "content_version",
+          "booking_policy"
+        ]
+      }
+    },
+    {
+      "event_id": "092626-004-VCP-006",
+      "event_type": "VENUE_CALENDAR_PUBLISHED",
+      "aggregate_type": "partner_venue",
+      "aggregate_id": "venue-guanghe-theater",
+      "occurred_at": "2026-09-26T11:05:00+08:00",
+      "version": 2,
+      "summary": "广和楼剧场发布场次日历与单场容量",
+      "payload": {
+        "effective_from": "2026-10-01",
+        "effective_to": "2026-10-07",
+        "open_slots": [
+          { "weekday": 6, "open": "14:30", "close": "16:30" }
+        ],
+        "daily_capacity": 80,
+        "closed_dates": []
+      }
+    },
+    {
+      "event_id": "092726-004-VPP-007",
+      "event_type": "VENUE_PROFILE_PUBLISHED",
+      "aggregate_type": "partner_venue",
+      "aggregate_id": "venue-yindingqiao-outdoor",
+      "occurred_at": "2026-09-27T14:00:00+08:00",
+      "version": 1,
+      "summary": "银锭桥户外演出点位发布资料",
+      "payload": {
+        "venue_name": "银锭桥户外演出",
+        "venue_category": "户外演出",
+        "content_version": "v1",
+        "accessibility": {
+          "step_free_access": true,
+          "wheelchair_friendly": false,
+          "notes": "桥边观演区为石板坡地，雨天可能取消"
+        },
+        "booking_policy": {
+          "requires_confirmation": false,
+          "self_confirm_by_venue": false,
+          "notice_text": "免预约，天气原因停演以当日公告为准"
+        },
+        "exposed_fields": [
+          "open_calendar",
+          "daily_capacity",
+          "accessibility_summary",
+          "content_version",
+          "weather_contingency"
+        ]
+      }
+    },
+    {
+      "event_id": "092726-004-VCP-008",
+      "event_type": "VENUE_CALENDAR_PUBLISHED",
+      "aggregate_type": "partner_venue",
+      "aggregate_id": "venue-yindingqiao-outdoor",
+      "occurred_at": "2026-09-27T14:05:00+08:00",
+      "version": 2,
+      "summary": "银锭桥户外演出发布当日两场的时间安排",
+      "payload": {
+        "effective_from": "2026-10-01",
+        "effective_to": "2026-10-07",
+        "open_slots": [
+          { "weekday": 6, "open": "16:00", "close": "17:30" }
+        ],
+        "daily_capacity": 200,
+        "closed_dates": []
+      }
+    },
+    {
+      "event_id": "092826-004-REL-009",
+      "event_type": "ROUTE_RELEASED",
+      "aggregate_type": "route_release",
+      "aggregate_id": "rr-shichahai-20261003",
+      "occurred_at": "2026-09-28T18:00:00+08:00",
+      "version": 1,
+      "summary": "什刹海慢游主题线路 10 月 3 日发布版冻结，各点位内容版本随发布固定",
+      "payload": {
+        "route_theme": "什刹海慢游：胡同、老字号与水岸戏声",
+        "route_date": "2026-10-03",
+        "language": "zh-CN",
+        "duration_minutes": 240,
+        "release_status": "STABLE",
+        "stops": [
+          {
+            "sequence": 1,
+            "venue_id": "venue-yaer-hutong",
+            "venue_name": "鸦儿胡同讲解点",
+            "content_version": "v3",
+            "venue_confirms_booking": false
+          },
+          {
+            "sequence": 2,
+            "venue_id": "venue-liuquanju",
+            "venue_name": "柳泉居",
+            "content_version": "v2",
+            "venue_confirms_booking": false
+          },
+          {
+            "sequence": 3,
+            "venue_id": "venue-guanghe-theater",
+            "venue_name": "广和楼剧场",
+            "content_version": "v1",
+            "venue_confirms_booking": true
+          },
+          {
+            "sequence": 4,
+            "venue_id": "venue-yindingqiao-outdoor",
+            "venue_name": "银锭桥户外演出",
+            "content_version": "v1",
+            "venue_confirms_booking": false
+          }
+        ]
+      }
+    },
+    {
+      "event_id": "092926-004-VPP-010",
+      "event_type": "VENUE_PROFILE_PUBLISHED",
+      "aggregate_type": "partner_venue",
+      "aggregate_id": "venue-kaorouji",
+      "occurred_at": "2026-09-29T10:00:00+08:00",
+      "version": 1,
+      "summary": "替代点位烤肉季入库联营，仅暴露编排所需字段",
+      "payload": {
+        "venue_name": "烤肉季（什刹海店）",
+        "venue_category": "老字号",
+        "content_version": "v1",
+        "accessibility": {
+          "step_free_access": true,
+          "wheelchair_friendly": true,
+          "notes": "一楼有无障碍餐位"
+        },
+        "booking_policy": {
+          "requires_confirmation": false,
+          "self_confirm_by_venue": false,
+          "notice_text": "高峰时段需现场取号"
+        },
+        "exposed_fields": [
+          "open_calendar",
+          "daily_capacity",
+          "remaining_capacity",
+          "accessibility_summary",
+          "content_version"
+        ]
+      }
+    },
+    {
+      "event_id": "092926-004-VCP-011",
+      "event_type": "VENUE_CALENDAR_PUBLISHED",
+      "aggregate_type": "partner_venue",
+      "aggregate_id": "venue-kaorouji",
+      "occurred_at": "2026-09-29T10:05:00+08:00",
+      "version": 2,
+      "summary": "烤肉季发布国庆日历与接待容量",
+      "payload": {
+        "effective_from": "2026-10-01",
+        "effective_to": "2026-10-07",
+        "open_slots": [
+          { "weekday": 6, "open": "11:00", "close": "21:00" },
+          { "weekday": 7, "open": "11:00", "close": "21:00" }
+        ],
+        "daily_capacity": 100,
+        "closed_dates": []
+      }
+    },
+    {
+      "event_id": "100126-004-VPP-012",
+      "event_type": "VENUE_PROFILE_PUBLISHED",
+      "aggregate_type": "partner_venue",
+      "aggregate_id": "venue-yaer-hutong",
+      "occurred_at": "2026-10-01T08:30:00+08:00",
+      "version": 3,
+      "summary": "鸦儿胡同讲解内容升级到 v4；已发布线路与历史打卡仍指向 v3 快照",
+      "payload": {
+        "venue_name": "鸦儿胡同讲解点",
+        "venue_category": "胡同讲解点",
+        "content_version": "v4",
+        "accessibility": {
+          "step_free_access": false,
+          "wheelchair_friendly": false,
+          "notes": "胡同内有门槛与碎石路面，轮椅需绕行烟袋斜街方向"
+        },
+        "booking_policy": {
+          "requires_confirmation": false,
+          "self_confirm_by_venue": false,
+          "notice_text": "开放式讲解点，随到随听"
+        },
+        "exposed_fields": [
+          "open_calendar",
+          "daily_capacity",
+          "accessibility_summary",
+          "content_version",
+          "audio_assets"
+        ]
+      }
+    },
+    {
+      "event_id": "100326-004-BREQ-001",
+      "event_type": "BOOKING_REQUESTED",
+      "aggregate_type": "visitor_itinerary",
+      "aggregate_id": "vi-zhang-20261003",
+      "occurred_at": "2026-10-03T09:30:00+08:00",
+      "version": 1,
+      "summary": "游客张女士打开已购行程，按已同意偏好为受限剧场发起预约",
+      "payload": {
+        "route_release_id": "rr-shichahai-20261003",
+        "venue_id": "venue-guanghe-theater",
+        "visitor_preferences": {
+          "language": "zh-CN",
+          "max_duration_minutes": 300,
+          "agreed_tags": ["胡同历史", "老字号饮食", "传统戏曲"]
+        }
+      }
+    },
+    {
+      "event_id": "100326-004-BCONF-002",
+      "event_type": "BOOKING_CONFIRMED",
+      "aggregate_type": "visitor_itinerary",
+      "aggregate_id": "vi-zhang-20261003",
+      "occurred_at": "2026-10-03T09:42:00+08:00",
+      "version": 2,
+      "summary": "广和楼剧场自行确认当日下午场预约",
+      "payload": {
+        "route_release_id": "rr-shichahai-20261003",
+        "venue_id": "venue-guanghe-theater",
+        "confirmation_ref": "GHJ-20261003-0176",
+        "confirmed_by_venue": true,
+        "confirmed_at": "2026-10-03T09:42:00+08:00",
+        "restrictions": "请于开演前 15 分钟凭确认号在南侧入口换票"
+      }
+    },
+    {
+      "event_id": "100326-004-EV-003",
+      "event_type": "VISIT_EVIDENCE_RECORDED",
+      "aggregate_type": "visit_evidence",
+      "aggregate_id": "ve-zhang-yaer-01",
+      "occurred_at": "2026-10-03T10:20:00+08:00",
+      "version": 1,
+      "summary": "张女士完成鸦儿胡同讲解点打卡，留存当时阅读的 v3 讲解内容",
+      "payload": {
+        "visitor_itinerary_id": "vi-zhang-20261003",
+        "venue_id": "venue-yaer-hutong",
+        "visited_at": "2026-10-03T10:20:00+08:00",
+        "content_version": "v3",
+        "content_snapshot_ref": "snapshot://content/venue-yaer-hutong/v3/20260925",
+        "proof_type": "QR_CHECKIN",
+        "proof_ref": "qr-yaer-1020-8841"
+      }
+    },
+    {
+      "event_id": "100326-004-VAC-004",
+      "event_type": "VENUE_AVAILABILITY_CHANGED",
+      "aggregate_type": "partner_venue",
+      "aggregate_id": "venue-liuquanju",
+      "occurred_at": "2026-10-03T13:40:00+08:00",
+      "version": 3,
+      "summary": "柳泉居当日在途时段临时闭店，属迟到通知并给出可替代点位",
+      "payload": {
+        "change_type": "CLOSED",
+        "effective_from": "2026-10-03T13:40:00+08:00",
+        "late_notice": true,
+        "reason": "后厨设备抢修，当日停止接待",
+        "expected_reopen_date": "2026-10-04",
+        "alternatives": [
+          {
+            "venue_id": "venue-kaorouji",
+            "venue_name": "烤肉季（什刹海店）",
+            "match_reason": "同属老字号餐饮，距原点位步行约 8 分钟，当日尚有余量且无障碍条件相当"
+          }
+        ]
+      }
+    },
+    {
+      "event_id": "100326-004-REV-005",
+      "event_type": "ITINERARY_REVISED",
+      "aggregate_type": "visitor_itinerary",
+      "aggregate_id": "vi-zhang-20261003",
+      "occurred_at": "2026-10-03T13:44:00+08:00",
+      "version": 3,
+      "summary": "运营定位到受影响的在途行程，用烤肉季替换柳泉居，已完成的鸦儿胡同打卡保持不变",
+      "payload": {
+        "route_release_id": "rr-shichahai-20261003",
+        "revision_no": 1,
+        "trigger_event_id": "100326-004-VAC-004",
+        "removed_stops": ["venue-liuquanju"],
+        "replacement_stops": [
+          {
+            "sequence": 2,
+            "venue_id": "venue-kaorouji",
+            "venue_name": "烤肉季（什刹海店）",
+            "content_version": "v1"
+          }
+        ],
+        "visitor_facing_explanation": "您行程中的柳泉居因后厨设备抢修今日临时闭店。我们已将午餐替换为步行约 8 分钟的烤肉季（什刹海店），同为老字号且今日仍可接待；其余安排不变，给您带来不便敬请谅解。"
+      }
+    },
+    {
+      "event_id": "100326-004-NOT-006",
+      "event_type": "VISITOR_NOTIFIED",
+      "aggregate_type": "visitor_itinerary",
+      "aggregate_id": "vi-zhang-20261003",
+      "occurred_at": "2026-10-03T13:45:00+08:00",
+      "version": 4,
+      "summary": "向在途游客推送闭店与替代方案通知",
+      "payload": {
+        "channel": "APP_PUSH",
+        "message_text": "【行程调整】柳泉居今日临时闭店，已为您替换为烤肉季（什刹海店），剧场与户外演出安排不变。点击查看详情。",
+        "related_event_id": "100326-004-REV-005",
+        "affected_stop_ids": ["venue-liuquanju"]
+      }
+    },
+    {
+      "event_id": "100326-004-EV-007",
+      "event_type": "VISIT_EVIDENCE_RECORDED",
+      "aggregate_type": "visit_evidence",
+      "aggregate_id": "ve-zhang-kaorou-02",
+      "occurred_at": "2026-10-03T14:05:00+08:00",
+      "version": 1,
+      "summary": "张女士在替代点位烤肉季完成打卡",
+      "payload": {
+        "visitor_itinerary_id": "vi-zhang-20261003",
+        "venue_id": "venue-kaorouji",
+        "visited_at": "2026-10-03T14:05:00+08:00",
+        "content_version": "v1",
+        "content_snapshot_ref": "snapshot://content/venue-kaorouji/v1/20260929",
+        "proof_type": "QR_CHECKIN",
+        "proof_ref": "qr-kaorou-1405-2260"
+      }
+    },
+    {
+      "event_id": "100326-004-EV-008",
+      "event_type": "VISIT_EVIDENCE_RECORDED",
+      "aggregate_type": "visit_evidence",
+      "aggregate_id": "ve-zhang-guanghe-03",
+      "occurred_at": "2026-10-03T15:50:00+08:00",
+      "version": 1,
+      "summary": "张女士凭剧场确认号观演后完成打卡",
+      "payload": {
+        "visitor_itinerary_id": "vi-zhang-20261003",
+        "venue_id": "venue-guanghe-theater",
+        "visited_at": "2026-10-03T15:50:00+08:00",
+        "content_version": "v1",
+        "content_snapshot_ref": "snapshot://content/venue-guanghe-theater/v1/20260926",
+        "proof_type": "VENUE_STAMP",
+        "proof_ref": "stamp-ghj-1550-0176"
+      }
+    },
+    {
+      "event_id": "100326-004-DIS-009",
+      "event_type": "SETTLEMENT_DISPUTED",
+      "aggregate_type": "visit_evidence",
+      "aggregate_id": "ve-zhang-kaorou-02",
+      "occurred_at": "2026-10-03T16:10:00+08:00",
+      "version": 2,
+      "summary": "烤肉季对该笔打卡凭证提出争议，联营分账暂缓",
+      "payload": {
+        "evidence_id": "ve-zhang-kaorou-02",
+        "disputed_by": "VENUE",
+        "reason": "门店称核销二维码疑为同行人截图，非本人到店扫码，要求核对定位与核销时间",
+        "hold_settlement": true
+      }
+    },
+    {
+      "event_id": "100326-004-HOLD-010",
+      "event_type": "SETTLEMENT_HELD",
+      "aggregate_type": "visit_evidence",
+      "aggregate_id": "ve-zhang-kaorou-02",
+      "occurred_at": "2026-10-03T16:12:00+08:00",
+      "version": 3,
+      "summary": "争议登记后该笔凭证分账置为暂缓",
+      "payload": {
+        "evidence_id": "ve-zhang-kaorou-02",
+        "dispute_event_id": "100326-004-DIS-009",
+        "hold_state": "HELD"
+      }
+    },
+    {
+      "event_id": "100326-004-SET-011",
+      "event_type": "VISIT_SETTLED",
+      "aggregate_type": "visit_evidence",
+      "aggregate_id": "ve-zhang-yaer-01",
+      "occurred_at": "2026-10-03T17:30:00+08:00",
+      "version": 2,
+      "summary": "鸦儿胡同打卡无争议，按联营合同正常结算",
+      "payload": {
+        "evidence_id": "ve-zhang-yaer-01",
+        "contract_id": "contract-route004-2026q4",
+        "settlement_state": "SETTLED",
+        "payable_amount": 12.0,
+        "currency": "CNY"
+      }
+    },
+    {
+      "event_id": "100326-004-SET-012",
+      "event_type": "VISIT_SETTLED",
+      "aggregate_type": "visit_evidence",
+      "aggregate_id": "ve-zhang-kaorou-02",
+      "occurred_at": "2026-10-03T17:45:00+08:00",
+      "version": 4,
+      "summary": "运营比对核销时间与定位后确认到店有效，争议解除并按合同结算",
+      "payload": {
+        "evidence_id": "ve-zhang-kaorou-02",
+        "contract_id": "contract-route004-2026q4",
+        "settlement_state": "SETTLED",
+        "payable_amount": 38.5,
+        "currency": "CNY",
+        "resolves_dispute_event_id": "100326-004-DIS-009"
+      }
+    },
+    {
+      "event_id": "100326-004-SET-013",
+      "event_type": "VISIT_SETTLED",
+      "aggregate_type": "visit_evidence",
+      "aggregate_id": "ve-zhang-guanghe-03",
+      "occurred_at": "2026-10-03T18:00:00+08:00",
+      "version": 2,
+      "summary": "剧场观演打卡与场馆确认号一致，按合同结算",
+      "payload": {
+        "evidence_id": "ve-zhang-guanghe-03",
+        "contract_id": "contract-route004-2026q4",
+        "settlement_state": "SETTLED",
+        "payable_amount": 96.0,
+        "currency": "CNY"
+      }
+    }
+  ]
+}

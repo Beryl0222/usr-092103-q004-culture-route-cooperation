@@ -1,6 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "文化探访线路联营领域事件",
+  "description": "跨模块交换的公共信封与按事件类型约定的载荷。点位只暴露完成编排所需字段；每条事件携带其聚合的单调递增版本。",
   "type": "object",
   "required": [
     "event_id",
@@ -9,20 +10,30 @@
     "aggregate_id",
     "occurred_at",
     "version",
-    "summary"
+    "summary",
+    "payload"
   ],
   "properties": {
     "event_id": {
       "type": "string",
-      "minLength": 1
+      "pattern": "^[0-9]{6}-[0-9]{3}-[A-Za-z][A-Za-z0-9_]*-[0-9]{3}$",
+      "description": "编号规则：业务日期(MMDDYY)-线路或活动序号-事件类别缩写-当日序号，如 100326-004-VAC-001"
     },
     "event_type": {
       "type": "string",
       "enum": [
+        "VENUE_PROFILE_PUBLISHED",
+        "VENUE_CALENDAR_PUBLISHED",
         "VENUE_AVAILABILITY_CHANGED",
         "ROUTE_RELEASED",
+        "BOOKING_REQUESTED",
         "BOOKING_CONFIRMED",
+        "BOOKING_DECLINED",
         "ITINERARY_REVISED",
+        "VISITOR_NOTIFIED",
+        "VISIT_EVIDENCE_RECORDED",
+        "SETTLEMENT_DISPUTED",
+        "SETTLEMENT_HELD",
         "VISIT_SETTLED"
       ]
     },
@@ -45,12 +56,358 @@
     },
     "version": {
       "type": "integer",
-      "minimum": 1
+      "minimum": 1,
+      "description": "该聚合内的事件序号，同一 aggregate_id 下严格单调递增"
     },
     "summary": {
       "type": "string",
       "minLength": 1
+    },
+    "payload": {
+      "type": "object",
+      "description": "事件载荷，仅包含完成编排、履约与结算所必需的字段"
     }
   },
-  "additionalProperties": true
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": { "properties": { "event_type": { "const": "VENUE_PROFILE_PUBLISHED" } } },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "partner_venue" },
+          "payload": {
+            "required": ["venue_name", "venue_category", "content_version", "accessibility", "booking_policy", "exposed_fields"],
+            "properties": {
+              "venue_name": { "type": "string", "minLength": 1 },
+              "venue_category": { "enum": ["胡同讲解点", "老字号", "剧场", "户外演出"] },
+              "content_version": { "type": "string", "pattern": "^v[0-9]+$" },
+              "accessibility": {
+                "type": "object",
+                "required": ["step_free_access", "wheelchair_friendly"],
+                "properties": {
+                  "step_free_access": { "type": "boolean" },
+                  "wheelchair_friendly": { "type": "boolean" },
+                  "notes": { "type": "string" }
+                }
+              },
+              "booking_policy": {
+                "type": "object",
+                "required": ["requires_confirmation", "self_confirm_by_venue"],
+                "properties": {
+                  "requires_confirmation": { "type": "boolean" },
+                  "self_confirm_by_venue": {
+                    "type": "boolean",
+                    "description": "受限场馆由场馆自行确认预约，平台不代确认"
+                  },
+                  "notice_text": { "type": "string" }
+                }
+              },
+              "exposed_fields": {
+                "type": "array",
+                "items": { "type": "string" },
+                "minItems": 1,
+                "description": "点位愿意向平台暴露的字段清单，遵循最小暴露"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "VENUE_CALENDAR_PUBLISHED" } } },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "partner_venue" },
+          "payload": {
+            "required": ["effective_from", "effective_to", "open_slots", "daily_capacity", "closed_dates"],
+            "properties": {
+              "effective_from": { "type": "string", "format": "date" },
+              "effective_to": { "type": "string", "format": "date" },
+              "open_slots": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["weekday", "open", "close"],
+                  "properties": {
+                    "weekday": { "type": "integer", "minimum": 1, "maximum": 7 },
+                    "open": { "type": "string" },
+                    "close": { "type": "string" }
+                  }
+                }
+              },
+              "daily_capacity": { "type": "integer", "minimum": 0 },
+              "closed_dates": { "type": "array", "items": { "type": "string", "format": "date" } }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "VENUE_AVAILABILITY_CHANGED" } } },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "partner_venue" },
+          "payload": {
+            "required": ["change_type", "effective_from", "late_notice", "alternatives"],
+            "properties": {
+              "change_type": { "enum": ["CLOSED", "FULL", "REDUCED_CAPACITY", "REOPENED"] },
+              "effective_from": { "type": "string", "format": "date-time" },
+              "late_notice": {
+                "type": "boolean",
+                "description": "是否为晚于编排窗口的迟到通知（如当日在途闭店）"
+              },
+              "reason": { "type": "string" },
+              "expected_reopen_date": { "type": "string", "format": "date" },
+              "remaining_capacity": { "type": "integer", "minimum": 0 },
+              "alternatives": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["venue_id", "venue_name", "match_reason"],
+                  "properties": {
+                    "venue_id": { "type": "string" },
+                    "venue_name": { "type": "string" },
+                    "match_reason": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "ROUTE_RELEASED" } } },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "route_release" },
+          "payload": {
+            "required": ["route_theme", "route_date", "language", "duration_minutes", "release_status", "stops"],
+            "properties": {
+              "route_theme": { "type": "string", "minLength": 1 },
+              "route_date": { "type": "string", "format": "date", "description": "不同主题线路按日期形成稳定发布版" },
+              "language": { "type": "string" },
+              "duration_minutes": { "type": "integer", "minimum": 1 },
+              "release_status": { "enum": ["STABLE", "SUPERSEDED"] },
+              "stops": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "required": ["sequence", "venue_id", "venue_name", "content_version", "venue_confirms_booking"],
+                  "properties": {
+                    "sequence": { "type": "integer", "minimum": 1 },
+                    "venue_id": { "type": "string" },
+                    "venue_name": { "type": "string" },
+                    "content_version": { "type": "string" },
+                    "venue_confirms_booking": { "type": "boolean" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "BOOKING_REQUESTED" } } },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "visitor_itinerary" },
+          "payload": {
+            "required": ["route_release_id", "venue_id", "visitor_preferences"],
+            "properties": {
+              "route_release_id": { "type": "string" },
+              "venue_id": { "type": "string" },
+              "visitor_preferences": {
+                "type": "object",
+                "properties": {
+                  "language": { "type": "string" },
+                  "max_duration_minutes": { "type": "integer" },
+                  "agreed_tags": {
+                    "type": "array",
+                    "items": { "type": "string" },
+                    "description": "仅基于游客已同意的偏好给出建议"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "BOOKING_CONFIRMED" } } },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "visitor_itinerary" },
+          "payload": {
+            "required": ["route_release_id", "venue_id", "confirmation_ref", "confirmed_by_venue"],
+            "properties": {
+              "route_release_id": { "type": "string" },
+              "venue_id": { "type": "string" },
+              "confirmation_ref": { "type": "string" },
+              "confirmed_by_venue": {
+                "type": "boolean",
+                "description": "受限场馆必须由场馆确认；平台代确认时该字段必须为 false 且不得发出确认"
+              },
+              "confirmed_at": { "type": "string", "format": "date-time" },
+              "restrictions": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "BOOKING_DECLINED" } } },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "visitor_itinerary" },
+          "payload": {
+            "required": ["route_release_id", "venue_id", "reason"],
+            "properties": {
+              "route_release_id": { "type": "string" },
+              "venue_id": { "type": "string" },
+              "reason": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "ITINERARY_REVISED" } } },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "visitor_itinerary" },
+          "payload": {
+            "required": ["route_release_id", "revision_no", "trigger_event_id", "removed_stops", "replacement_stops", "visitor_facing_explanation"],
+            "properties": {
+              "route_release_id": { "type": "string" },
+              "revision_no": { "type": "integer", "minimum": 1 },
+              "trigger_event_id": {
+                "type": "string",
+                "description": "触发改线的 VENUE_AVAILABILITY_CHANGED 事件编号"
+              },
+              "removed_stops": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+              "replacement_stops": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["sequence", "venue_id", "venue_name", "content_version"],
+                  "properties": {
+                    "sequence": { "type": "integer", "minimum": 1 },
+                    "venue_id": { "type": "string" },
+                    "venue_name": { "type": "string" },
+                    "content_version": { "type": "string" }
+                  }
+                }
+              },
+              "visitor_facing_explanation": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "VISITOR_NOTIFIED" } } },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "visitor_itinerary" },
+          "payload": {
+            "required": ["channel", "message_text", "related_event_id"],
+            "properties": {
+              "channel": { "enum": ["APP_PUSH", "SMS", "IN_APP"] },
+              "message_text": { "type": "string", "minLength": 1 },
+              "related_event_id": { "type": "string" },
+              "affected_stop_ids": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "VISIT_EVIDENCE_RECORDED" } } },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "visit_evidence" },
+          "payload": {
+            "required": ["visitor_itinerary_id", "venue_id", "visited_at", "content_version", "content_snapshot_ref", "proof_type", "proof_ref"],
+            "properties": {
+              "visitor_itinerary_id": { "type": "string" },
+              "venue_id": { "type": "string" },
+              "visited_at": { "type": "string", "format": "date-time" },
+              "content_version": { "type": "string" },
+              "content_snapshot_ref": {
+                "type": "string",
+                "description": "游客当时读到的讲解内容快照引用，改版后仍可回放，不被覆盖"
+              },
+              "proof_type": { "enum": ["QR_CHECKIN", "GPS", "VENUE_STAMP"] },
+              "proof_ref": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "SETTLEMENT_DISPUTED" } } },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "visit_evidence" },
+          "payload": {
+            "required": ["evidence_id", "disputed_by", "reason", "hold_settlement"],
+            "properties": {
+              "evidence_id": { "type": "string" },
+              "disputed_by": { "enum": ["VISITOR", "VENUE", "OPERATIONS"] },
+              "reason": { "type": "string", "minLength": 1 },
+              "hold_settlement": {
+                "const": true,
+                "description": "凭证发生争议时必须暂缓联营分账"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "SETTLEMENT_HELD" } } },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "visit_evidence" },
+          "payload": {
+            "required": ["evidence_id", "dispute_event_id", "hold_state"],
+            "properties": {
+              "evidence_id": { "type": "string" },
+              "dispute_event_id": { "type": "string" },
+              "hold_state": { "const": "HELD" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "VISIT_SETTLED" } } },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "visit_evidence" },
+          "payload": {
+            "required": ["evidence_id", "contract_id", "settlement_state", "payable_amount", "currency"],
+            "properties": {
+              "evidence_id": { "type": "string" },
+              "contract_id": { "type": "string" },
+              "settlement_state": {
+                "enum": ["SETTLED", "HELD"],
+                "description": "争议未确认前只能为 HELD；确认后按合同结算为 SETTLED"
+              },
+              "payable_amount": { "type": "number", "minimum": 0 },
+              "currency": { "type": "string", "pattern": "^[A-Z]{3}$" },
+              "resolves_dispute_event_id": {
+                "type": "string",
+                "description": "若由争议确认后结算，填写被确认的争议事件编号"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
 }

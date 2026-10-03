@@ -1,9 +1,23 @@
 {
-  "event_id": "092103-004-sample-001",
+  "event_id": "100326-004-VAC-004",
   "event_type": "VENUE_AVAILABILITY_CHANGED",
-  "aggregate_type": "route_release",
-  "aggregate_id": "culture_route_cooperation-001",
-  "occurred_at": "2026-09-20T16:00:00+08:00",
-  "version": 1,
-  "summary": "文化探访线路联营联调样例"
+  "aggregate_type": "partner_venue",
+  "aggregate_id": "venue-liuquanju",
+  "occurred_at": "2026-10-03T13:40:00+08:00",
+  "version": 3,
+  "summary": "柳泉居当日在途时段临时闭店（迟到通知），完整链路见 data/samples/2026-10-03-route-story.json",
+  "payload": {
+    "change_type": "CLOSED",
+    "effective_from": "2026-10-03T13:40:00+08:00",
+    "late_notice": true,
+    "reason": "后厨设备抢修，当日停止接待",
+    "expected_reopen_date": "2026-10-04",
+    "alternatives": [
+      {
+        "venue_id": "venue-kaorouji",
+        "venue_name": "烤肉季（什刹海店）",
+        "match_reason": "同属老字号，距原点位步行约8分钟，当日仍有余量"
+      }
+    ]
+  }
 }
